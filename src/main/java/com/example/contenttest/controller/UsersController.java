@@ -18,8 +18,7 @@ public class UsersController {
 
     @Autowired
     private UserService userService;
-
-    @PostMapping(value = "/addUser")
+    @PostMapping(value = "/addUser" )
     public Users addUser(@Valid @RequestBody Users users) {
         return userService.saveUser(users);
     }
@@ -35,7 +34,7 @@ public class UsersController {
     }
 
     @PutMapping(value = "/updateUser")
-    public Users updateUser(@RequestBody Users users){
+    public Users updateUser(@RequestBody Users users) throws ResourceNotFoundException {
         return userService.updateUser(users);
     }
 
@@ -46,13 +45,13 @@ public class UsersController {
 
     @PostMapping(value = "/login")
     @ResponseBody
-    public ObjectNode login(@RequestBody LoginRequest loginRequest){
+    public ObjectNode login(@Valid @RequestBody LoginRequest loginRequest){
         return userService.login(loginRequest);
     }
 
     @PostMapping(value = "/register")
     @ResponseBody
-    public ObjectNode register(@RequestBody Users users){
+    public ObjectNode register(@Valid @RequestBody Users users){
         return userService.register(users);
     }
 

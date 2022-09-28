@@ -16,8 +16,7 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
-
-    @PostMapping(value = "/addContent")
+    @PostMapping(value = "/addContent" )
     public Content addContent(@Valid @RequestBody Content content) {
         return contentService.saveContent(content);
     }

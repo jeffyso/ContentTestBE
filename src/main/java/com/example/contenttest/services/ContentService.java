@@ -16,7 +16,7 @@ public class ContentService {
     @Autowired
     private ContentRepository contentRepository;
 
-    public Content saveContent(Content content){
+    public Content saveContent(Content content) {
        return contentRepository.save(content);
     }
 

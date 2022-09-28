@@ -8,10 +8,12 @@ import com.example.contenttest.repository.UserRepository;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sun.org.apache.xpath.internal.operations.Variable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -37,8 +39,8 @@ public class UserService {
 
     String message = "message" ;
 
-    public Users updateUser(Users users){
-        Users findUser = userRepository.findById(users.getId()).orElse(null);
+    public Users updateUser(Users users) throws ResourceNotFoundException {
+        Users findUser = userRepository.findById(users.getId()).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         findUser.setUsername(findUser.getUsername());
         findUser.setPassword(findUser.getPassword());
         findUser.setNickname(findUser.getNickname());
@@ -65,6 +67,7 @@ public class UserService {
 
     public ObjectNode register(Users users) {
         Users user = new Users();
+
         ObjectNode response = jsonMapper.createObjectNode();
         user.setUsername(users.getUsername());
         user.setPassword(users.getPassword());

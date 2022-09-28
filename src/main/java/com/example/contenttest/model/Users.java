@@ -1,6 +1,7 @@
 package com.example.contenttest.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Users {
@@ -9,15 +10,19 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id ;
 
+    @NotNull
     @Column(unique=true)
     private String username ;
 
+    @NotNull
     @Column
     private String password ;
 
+    @NotNull
     @Column
     private String nickname ;
 
+    @NotNull
     @Column(unique=true)
     private String email ;
 

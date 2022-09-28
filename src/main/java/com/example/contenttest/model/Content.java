@@ -1,6 +1,7 @@
 package com.example.contenttest.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Content {
@@ -10,9 +11,11 @@ public class Content {
     private long id ;
 
     @Column
+    @NotNull
     private String title;
 
     @Column
+    @NotNull
     private String content;
 
     public long getId() {
