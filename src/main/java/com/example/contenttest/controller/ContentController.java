@@ -2,6 +2,7 @@ package com.example.contenttest.controller;
 
 import com.example.contenttest.exception.ResourceNotFoundException;
 import com.example.contenttest.model.Content;
+import com.example.contenttest.model.DeleteResponse;
 import com.example.contenttest.repository.ContentRepository;
 import com.example.contenttest.services.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,13 @@ public class ContentController {
         return contentService.getContentById(id);
     }
 
-    @PutMapping(value = "/updateContent")
-    public Content updateContent(@RequestBody Content content){
-        return contentService.updateContent(content);
+    @PutMapping(value = "/updateContent/{id}")
+    public Content updateContent(@PathVariable(name = "id") long id , @RequestBody Content content){
+        return contentService.updateContent(id,content);
     }
 
     @DeleteMapping(value = "/deleteContent/{id}")
-    public String delete(@PathVariable(name = "id") long id) throws ResourceNotFoundException {
+    public DeleteResponse delete(@PathVariable(name = "id") long id) throws ResourceNotFoundException {
         return contentService.deleteContent(id);
     }
 }

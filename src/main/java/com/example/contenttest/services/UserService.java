@@ -8,7 +8,6 @@ import com.example.contenttest.repository.UserRepository;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sun.org.apache.xpath.internal.operations.Variable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -25,22 +24,27 @@ public class UserService {
 
     private static final ObjectMapper jsonMapper = new ObjectMapper();
 
-    public Users saveUser(Users users){
-        return userRepository.save(users);
+    public Users saveUser(Users users) throws ResourceNotFoundException {
+
+        try{
+            return userRepository.save(users);
+        }catch (Exception e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
     }
 
     public List<Users> getAllUser(){
         return userRepository.findAll();
     }
 
-    public Users getUserById(long id){
+    public Users getUserById(String id){
         return userRepository.findById(id).orElse(null);
     }
 
     String message = "message" ;
 
-    public Users updateUser(Users users) throws ResourceNotFoundException {
-        Users findUser = userRepository.findById(users.getId()).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+    public Users updateUser(String id , Users users) throws ResourceNotFoundException {
+        Users findUser = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         findUser.setUsername(findUser.getUsername());
         findUser.setPassword(findUser.getPassword());
         findUser.setNickname(findUser.getNickname());
@@ -48,21 +52,15 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
-    public String deleteUser(long id) throws ResourceNotFoundException {
+    public String deleteUser(String id) throws ResourceNotFoundException {
         userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
         userRepository.deleteById(id);
         return "Delete Success";
     }
 
-    public ObjectNode login(LoginRequest loginRequest) {
+    public Users login(LoginRequest loginRequest) {
         Users user = userRepository.findByUsernameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
-        ObjectNode response = jsonMapper.createObjectNode();
-        if(user == null){
-            response.put(message ,"Login Failed");
-        } else {
-            response.put(message ,"Logged in");
-        }
-        return response;
+        return user;
     }
 
     public ObjectNode register(Users users) {
@@ -79,5 +77,11 @@ public class UserService {
         response.put(message,"Success");
 
         return response;
+    }
+
+    public Users update(Users user, String email, String nickname) {
+        user.setEmail(email);
+        user.setNickname(nickname);
+        return userRepository.save(user);
     }
 }
